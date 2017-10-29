@@ -32,7 +32,7 @@ public class ProductRepositoryTests {
         silla = repository.save(new Product("Silla Rower", "Silla de comedor"));
         silla = repository.save(new Product("Silla Rower", "Silla de jardín"));
         reloj = repository.save(new Product("Swatch 200", "Swatch 200 de pulsera"));
-        galletas = repository.save(new Product("Galletas Maria", "Caja de galletas Maria"));
+        galletas = repository.save(new Product("Galletas Maria 34", "Caja de galletas Maria"));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class ProductRepositoryTests {
 
         List<Product> result = repository.findByName("Galletas Maria");
 
-        assertThat(result).hasSize(1).extracting("description").contains("Caja de galletas Maria");
+        assertThat(result).hasSize(7).extracting("description").contains("Caja de galletas Maria");
     }
     
     @Test
