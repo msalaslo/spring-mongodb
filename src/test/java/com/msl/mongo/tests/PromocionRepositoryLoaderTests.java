@@ -8,13 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -22,13 +26,19 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msl.mongo.domain.promocion.Promocion;
 import com.msl.mongo.domain.promocion.PromocionRepository;
+import com.msl.mongo.domain.promocion.PromocionRepositoryCustomImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PromocionRepositoryLoaderTests {
+	
+	Logger logger = LoggerFactory.getLogger(PromocionRepositoryLoaderTests.class);
 
     @Autowired
     PromocionRepository repository;
+    
+    @Autowired
+    PromocionRepositoryCustomImpl customRepository;
 
     @Before
     public void setUp() {
@@ -47,17 +57,26 @@ public class PromocionRepositoryLoaderTests {
         repository.save(loadProducts(0));
     }
     
-//    @Test
+    @Test
+    public void writeBulk() {
+    	logger.debug("writeBulk antes");
+    	CompletableFuture<Integer> numRegistros = customRepository.save(loadProducts(0));
+    	logger.debug("writeBulk despues, registros insertados:" + numRegistros);
+    }
+    
+    @Async
     public List<Promocion> loadProducts(int start){
     	List<Promocion> promociones = new ArrayList<Promocion>();
-        int numEmpresas = start + 14;
-        int numCentros = start + 500; 
-        int numDepartamentos = start + 1; 
-        int numDivisiones = start + 1;
-        int numFamilias = start + 50;
-        int numBarras = start + 1;
-        int numTallas = start + 1;
-        int numPromociones = start + 1;
+        int numEmpresas = start + 10;
+        int numCentros = start + 100; 
+        int numDepartamentos = start + 2; 
+        int numDivisiones = start + 2;
+        int numFamilias = start + 5;
+        int numBarras = start + 5;
+        int numTallas = start + 5;
+        int numPromociones = start + 2;
+        int total = numEmpresas * numCentros * numDepartamentos * numDivisiones * numFamilias * numBarras * numTallas * numPromociones;
+        logger.debug("Total registros a cargar:" + total);
         for (int empresa = start; empresa < numEmpresas; empresa++) {
         	for (int centro = start; centro < numCentros; centro++) {
         		for (int division = start; division < numDivisiones; division++) {
@@ -65,9 +84,18 @@ public class PromocionRepositoryLoaderTests {
 		        		for (int familia = start; familia < numFamilias; familia++) {
 							for (int barra = start; barra < numBarras; barra++) {
 								for (int talla = start; talla < numTallas; talla++) {
-									String ref = "" + empresa + centro + familia + barra + talla;
+									String resto = String.format("%027d",Integer.valueOf(empresa + centro + familia + barra + talla));
 									for(int codPromocion = start; codPromocion < numPromociones; codPromocion++){
-										Promocion promocion = new Promocion(empresa + "", centro + "", departamento + "", division + "", familia + "", barra + "", talla+ "", codPromocion+ "", ref);
+										Promocion promocion = new Promocion(
+												String.format("%03d",Integer.valueOf(empresa)), 
+												String.format("%04d",Integer.valueOf(centro)), 
+												String.format("%02d",Integer.valueOf(division)), 
+												String.format("%04d",Integer.valueOf(departamento)), 
+												String.format("%03d",Integer.valueOf(familia)), 
+												String.format("%05d",Integer.valueOf(barra)), 
+												String.format("%03d",Integer.valueOf(talla)), 
+												String.format("%08d",Integer.valueOf(codPromocion)), 
+												resto);
 										promociones.add(promocion);
 									}
 								}
@@ -76,9 +104,9 @@ public class PromocionRepositoryLoaderTests {
         			}
         		}
 			}
-        	System.out.println("Centros cargados:" + numCentros);
+        	logger.debug("Centros cargados:" + numCentros);
 		}
-        System.out.println("Empresa cargadas:" + numEmpresas);
+        logger.debug("Empresa cargadas:" + numEmpresas);
         return promociones;
     }
     
