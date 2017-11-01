@@ -1,7 +1,5 @@
 package com.msl.mongo;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.msl.mongo.domain.companies.CompanyRepository;
 import com.msl.mongo.domain.customer.Customer;
 import com.msl.mongo.domain.customer.CustomerRepository;
-import com.msl.mongo.domain.product.Product;
-import com.msl.mongo.domain.product.ProductRepository;
+import com.msl.mongo.domain.promocion.PromocionRepository;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -21,7 +18,7 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	private CompanyRepository companyRepository;
 	@Autowired
-	private ProductRepository productRepository;
+	private PromocionRepository productRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -76,8 +73,8 @@ public class Application implements CommandLineRunner {
 		System.out.println();
 		
 		// fetch an individual product
-		System.out.println("product found with findByName('Swatch 200'):");
-		System.out.println(productRepository.findByName("Swatch 200"));
+		System.out.println("product found with findByCentro('001'):");
+		System.out.println(productRepository.findByCentro("001"));
 //        List<Product> result = productRepository.findAll();
 //        System.out.println("Product repository size:" + result.size());
 

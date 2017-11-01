@@ -1,7 +1,5 @@
 package com.msl.mongo.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,66 +20,71 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.msl.mongo.domain.product.Product;
-import com.msl.mongo.domain.product.ProductRepository;
+import com.msl.mongo.domain.promocion.Promocion;
+import com.msl.mongo.domain.promocion.PromocionRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProductRepositoryLoaderTests {
+public class PromocionRepositoryLoaderTests {
 
     @Autowired
-    ProductRepository repository;
+    PromocionRepository repository;
 
     @Before
     public void setUp() {
         
     }
     
-    @Test
-    public void deleteAll() {
-    	repository.deleteAll();
-        List<Product> result = repository.findAll();
-        assertThat(result).hasSize(0);
-    }
+//    @Test
+//    public void deleteAll() {
+//    	repository.deleteAll();
+//        List<Promocion> result = repository.findAll();
+//        assertThat(result).hasSize(0);
+//    }
     
     @Test
     public void load() {
         repository.save(loadProducts(0));
-        List<Product> result = repository.findByDescription("DESC1");
-        assertThat(result).hasSize(1).extracting("name").contains("NAME00000");
     }
     
 //    @Test
-    public List<Product> loadProducts(int start){
-    	List<Product> products = new ArrayList<Product>();
+    public List<Promocion> loadProducts(int start){
+    	List<Promocion> promociones = new ArrayList<Promocion>();
         int numEmpresas = start + 14;
-//        int numCentros = start + 500;
-//        int numFamilias = start + 50;
-        int numCentros = start + 500;
+        int numCentros = start + 500; 
+        int numDepartamentos = start + 1; 
+        int numDivisiones = start + 1;
         int numFamilias = start + 50;
         int numBarras = start + 1;
         int numTallas = start + 1;
+        int numPromociones = start + 1;
         for (int empresa = start; empresa < numEmpresas; empresa++) {
         	for (int centro = start; centro < numCentros; centro++) {
-        		for (int familia = start; familia < numFamilias; familia++) {
-					for (int barra = start; barra < numBarras; barra++) {
-						for (int talla = start; talla < numTallas; talla++) {
-							String ref = "" + empresa + centro + familia + barra + talla;
-							Product product = new Product("NAME" + ref , "DESC" + ref, "EMP" + empresa, "CENT" + centro, "FAM" + familia, "BAR" + barra, "TAL" + talla);
-							products.add(product);
+        		for (int division = start; division < numDivisiones; division++) {
+        			for (int departamento = start; departamento < numDepartamentos; departamento++) {
+		        		for (int familia = start; familia < numFamilias; familia++) {
+							for (int barra = start; barra < numBarras; barra++) {
+								for (int talla = start; talla < numTallas; talla++) {
+									String ref = "" + empresa + centro + familia + barra + talla;
+									for(int codPromocion = start; codPromocion < numPromociones; codPromocion++){
+										Promocion promocion = new Promocion(empresa + "", centro + "", departamento + "", division + "", familia + "", barra + "", talla+ "", codPromocion+ "", ref);
+										promociones.add(promocion);
+									}
+								}
+							}
 						}
-					}
-				}
+        			}
+        		}
 			}
         	System.out.println("Centros cargados:" + numCentros);
 		}
         System.out.println("Empresa cargadas:" + numEmpresas);
-        return products;
+        return promociones;
     }
     
     public void writeToFile() {
     	ObjectMapper mapper = new ObjectMapper();
-    	List<Product> products = loadProducts(0);
+    	List<Promocion> products = loadProducts(0);
     	//Object to JSON in file
     	try {
     		File file = new File("C:\\temp\\file.json");
@@ -105,7 +108,7 @@ public class ProductRepositoryLoaderTests {
     
     public void writeToFileReplacingChars(int startIndex) {
     	ObjectMapper mapper = new ObjectMapper();
-    	List<Product> products = loadProducts(startIndex);
+    	List<Promocion> products = loadProducts(startIndex);
     	FileWriter fw = null;
     	BufferedWriter bw = null;
     	BufferedReader br = null;
@@ -157,12 +160,5 @@ public class ProductRepositoryLoaderTests {
 			}
 		}
     }
-    
-    @Test
-    public void findsByDescription() {
 
-        List<Product> result = repository.findByDescription("DESC00000");
-
-        assertThat(result).hasSize(1).extracting("name").contains("NAME00000");
-    }
 }
