@@ -74,7 +74,7 @@ public class Application implements CommandLineRunner {
 		
 		// fetch an individual product
 		System.out.println("product found with findByCentro('001'):");
-		System.out.println(productRepository.findByCentro("001"));
+		System.out.println(productRepository.findByCentrooo("001"));
 //        List<Product> result = productRepository.findAll();
 //        System.out.println("Product repository size:" + result.size());
 

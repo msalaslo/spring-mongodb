@@ -14,18 +14,18 @@ public class PromocionService {
 	PromocionRepository repository;
 	
     public List<Promocion> findByEmpresa(String empresa){
-    	return repository.findByEmpresa(empresa);
+    	return repository.findByCempresa(empresa);
     }
     
     public List<Promocion> findByCentro(String centro){
-    	return repository.findByCentro(centro);
+    	return repository.findByCentrooo(centro);
     }
     
     public List<Promocion> findByDivision(String division){
-    	return repository.findByDivision(division);
+    	return repository.findByCdivisio(division);
     }
     public List<Promocion> findByFamilia(String familia){
-    	return repository.findByFamilia(familia);
+    	return repository.findByCfamilia(familia);
     }
 	
 	public Promocion save(Promocion product) {
