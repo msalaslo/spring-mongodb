@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PromocionRepository extends MongoRepository<Promocion, String>{//, PromocionRepositoryCustom {
 
+	@SuppressWarnings("unchecked")
 	public Promocion save(Promocion product);
     public Promocion findById(String id);
     public List<Promocion> findByCempresa(String cempresa);

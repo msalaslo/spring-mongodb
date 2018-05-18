@@ -1,4 +1,4 @@
-package com.msl.mongo.tests;
+package com.msl.mongo.domain.customer;
 
 import static org.assertj.core.api.Assertions.*;
 

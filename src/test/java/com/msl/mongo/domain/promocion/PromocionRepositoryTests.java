@@ -1,4 +1,4 @@
-package com.msl.mongo.tests;
+package com.msl.mongo.domain.promocion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

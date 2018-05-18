@@ -1,4 +1,4 @@
-package com.msl.mongo.tests;
+package com.msl.mongo.domain.promocion;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

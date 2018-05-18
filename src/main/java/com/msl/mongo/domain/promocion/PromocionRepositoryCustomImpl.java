@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BulkWriteResult;
-import com.msl.mongo.tests.PromocionRepositoryLoaderTests;
 
 @Component
 public class PromocionRepositoryCustomImpl {//implements PromocionRepositoryCustom{
